@@ -8,9 +8,9 @@ load_dotenv()
 
 my_username = os.getenv("MDWIKI_USERNAME", "")
 mdwiki_pass = os.getenv("MDWIKI_PASSWORD", "")
-MAIN_PATH = os.getenv("MAIN_PATH", "")
+MAIN_PATH = os.getenv("EDITORS_STATS_PATH", "")
 
-main_dump_path = Path(MAIN_PATH) if MAIN_PATH else Path(__file__).parent.parent / "stats_dumps"
+main_dump_path = Path(MAIN_PATH) if MAIN_PATH else Path(__file__).parent.parent / "editors_stats_dump"
 
 editors_dump_path = main_dump_path / "editors"
 sites_path = main_dump_path / "sites"
