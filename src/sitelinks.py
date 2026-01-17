@@ -4,8 +4,7 @@
 import json
 import logging
 
-from apis import wikidataapi
-
+from .wiki import wikidataapi_post
 from .config import sites_path
 from .qids import load_qids_from_file
 
@@ -35,7 +34,7 @@ def get_sitelinks(qs_list, lena=300):
         # ---
         logger.info(f"<<green>> done:{len(all_entities)} from {len(qs_list)}, get sitelinks for {len(qids)} qids.")
         # ---
-        json1 = wikidataapi.post(params_wd)
+        json1 = wikidataapi_post(params_wd)
         # ---
         if json1:
             # ---

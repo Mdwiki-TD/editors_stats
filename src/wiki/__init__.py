@@ -1,6 +1,6 @@
 import os
 import sys
-
+from .wikidata import wikidataapi_post
 try:
     from newapi import ALL_APIS  # noqa: F401
 
@@ -16,4 +16,7 @@ except ImportError:
         print("newapi_bot not found, using mwclient fallback")
         from .mdwiki_page_mwclient import page_mwclient as page
 
-__all__ = ["page"]
+__all__ = [
+    "page",
+    "wikidataapi_post",
+]
