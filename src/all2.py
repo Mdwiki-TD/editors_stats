@@ -108,7 +108,7 @@ def get_all_editors(files) -> dict:
         # ---
         site = file[:-5]
         # ---
-        print(f"{file=}, {site=}")
+        logger.debug(f"{file=}, {site=}")
         # ---
         if f"{site}wiki" in skip_sites:
             continue

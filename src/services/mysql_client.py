@@ -70,7 +70,7 @@ def _sql_connect_pymysql(query: str, db: str = "", host: str = "", values: tuple
         try:
             cursor.execute(query, params)
 
-        except Exception as e:
+        except pymysql.Error as e:
             logger.exception(e)
             return []
         # ---

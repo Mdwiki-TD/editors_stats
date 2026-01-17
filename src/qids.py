@@ -2,11 +2,13 @@
 """
 import json
 import os
+import logging
 
 from .api_sql import retrieve_sql_results
 from .config import main_dump_path
 
 qids_file = main_dump_path / "qids.json"
+logger = logging.getLogger(__name__)
 
 if not os.path.exists(qids_file):
     with open(qids_file, "w", encoding="utf-8") as f:
@@ -44,13 +46,13 @@ def get_qids_list():
     # ---
     articles = get_en_articles()
     # ---
-    print(f"len articles: {len(articles)}")
+    logger.debug(f"len articles: {len(articles)}")
     # ---
     qids_list = list(articles.values())
     # ---
     with open(qids_file, "w", encoding="utf-8") as f:
         json.dump(qids_list, f, sort_keys=True)
 
-    print(f"dumped {len(qids_list)} qids to {qids_file}")
+    logger.debug(f"dumped {len(qids_list)} qids to {qids_file}")
 
     return qids_list

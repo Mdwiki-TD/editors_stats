@@ -3,8 +3,8 @@
 """
 import json
 import os
-import re
 import sys
+import ipaddress
 from datetime import datetime
 
 import tqdm
@@ -20,16 +20,11 @@ last_year = datetime.now().year - 1
 def validate_ip(ip_address):
     if ip_address == "CommonsDelinker":
         return True
-    # IPv4 pattern
-    ipv4_pattern = r"^\b(?:\d{1,3}\.){3}\d{1,3}\b$"
-    # IPv6 pattern
-    ipv6_pattern = r"^\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b$"
-
-    if re.match(ipv4_pattern, ip_address):
+    try:
+        ipaddress.ip_address(ip_address)
         return True
-    elif re.match(ipv6_pattern, ip_address):
-        return True
-    return False
+    except ValueError:
+        return False
 
 
 def get_editors_sql(links, site, split_by=100):
@@ -63,7 +58,7 @@ def get_editors_sql(links, site, split_by=100):
         # ---
         qua2 = qua.replace("%s", lim)
         # ---
-        # print(qua2)
+        # logger.debug(qua2)
         # ---
         edits = retrieve_sql_results(qua2, site)
         # ---
