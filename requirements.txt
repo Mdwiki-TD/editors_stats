@@ -1,0 +1,5 @@
+tqdm
+mwclient
+requests
+pymysql
+python-dotenv
