@@ -84,7 +84,7 @@ def work_all_editors(editors):
     # ---
     text += f"\n==users==\n{txt_table}"
     # ---
-    page_obj = page(title, "www", family="mdwiki")
+    page_obj = page(title)
     p_text = page_obj.get_text()
     # ---
     if p_text != text:

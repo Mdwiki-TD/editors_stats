@@ -87,7 +87,7 @@ def work_in_one_site(site, links):
     # ---
     text += "\n|}"
     # ---
-    page_obj = page(title, "www", family="mdwiki")
+    page_obj = page(title)
     p_text = page_obj.get_text()
     # ---
     if p_text != text:
