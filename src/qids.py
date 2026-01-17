@@ -2,6 +2,7 @@
 """
 import json
 import os
+
 from .api_sql import retrieve_sql_results
 from .config import main_dump_path
 

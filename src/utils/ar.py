@@ -1,9 +1,9 @@
 """
 
 """
-from ..api_sql import retrieve_sql_results
-
 from datetime import datetime
+
+from ..api_sql import retrieve_sql_results
 
 last_year = datetime.now().year - 1
 

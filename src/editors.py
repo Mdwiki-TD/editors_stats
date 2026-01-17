@@ -2,17 +2,17 @@
 
 """
 import json
-import re
 import os
+import re
 import sys
-from pymysql.converters import escape_string
 from datetime import datetime
+
 import tqdm
+from pymysql.converters import escape_string
 
-from config import editors_dump_path
-
-from .utils.ar import get_ar_results
 from .api_sql import retrieve_sql_results
+from .config import editors_dump_path
+from .utils.ar import get_ar_results
 
 last_year = datetime.now().year - 1
 
@@ -52,7 +52,9 @@ def get_editors_sql(links, site, split_by=100):
     # ---
     editors = {}
     # ---
-    for i in tqdm.tqdm(range(0, len(links), split_by), desc=f"get_editors_sql site:{site}", total=len(links) // split_by):
+    for i in tqdm.tqdm(
+        range(0, len(links), split_by), desc=f"get_editors_sql site:{site}", total=len(links) // split_by
+    ):
         # ---
         pages = links[i : i + split_by]
         # ---

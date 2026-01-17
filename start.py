@@ -3,11 +3,12 @@ tfj run stats1 --image python3.10 --command "$HOME/local/bin/python3 ~/pybot/edi
 
 """
 import os
+
+from src.all2 import get_all_editors, work_all_editors
+from src.by_site import work_in_all_sites
 from src.config import editors_dump_path
 from src.qids import get_qids_list
 from src.sitelinks import load_sitelink_data
-from src.by_site import work_in_all_sites
-from src.all2 import get_all_editors, work_all_editors
 
 
 def start():

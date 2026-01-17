@@ -5,10 +5,10 @@ import json
 import logging
 import os
 from datetime import datetime
-from .wiki import page
 
-from .editors import validate_ip
 from .config import editors_dump_path
+from .editors import validate_ip
+from .wiki import page
 
 logger = logging.getLogger(__name__)
 last_year = datetime.now().year - 1

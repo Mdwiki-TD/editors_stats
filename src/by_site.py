@@ -5,14 +5,15 @@ tfj run stats2 --image python3.9 --command "$HOME/local/bin/python3 core8/pwb.py
 
 """
 import json
-import re
 import logging
 import os
+import re
 import sys
 from datetime import datetime
-from .wiki import page
-from .editors import get_editors, validate_ip
+
 from .config import sites_path
+from .editors import get_editors, validate_ip
+from .wiki import page
 
 logger = logging.getLogger(__name__)
 last_year = datetime.now().year - 1

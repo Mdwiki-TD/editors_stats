@@ -1,11 +1,13 @@
-'''
-'''
+"""
+"""
 # ---
 import json
 import logging
+
 from apis import wikidataapi
-from .qids import load_qids_from_file
+
 from .config import sites_path
+from .qids import load_qids_from_file
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +29,11 @@ def get_sitelinks(qs_list, lena=300):
     # ---
     for i in range(0, len(qs_list), lena):
         # ---
-        qids = qs_list[i: i + lena]
+        qids = qs_list[i : i + lena]
         # ---
-        params_wd["ids"] = '|'.join(qids)
+        params_wd["ids"] = "|".join(qids)
         # ---
-        logger.info(f'<<green>> done:{len(all_entities)} from {len(qs_list)}, get sitelinks for {len(qids)} qids.')
+        logger.info(f"<<green>> done:{len(all_entities)} from {len(qs_list)}, get sitelinks for {len(qids)} qids.")
         # ---
         json1 = wikidataapi.post(params_wd)
         # ---
@@ -49,8 +51,8 @@ def get_sitelinks(qs_list, lena=300):
         # ---
         for _, tab in kk.get("sitelinks", {}).items():
             # ---
-            title = tab.get("title", '')
-            site = tab.get("site", '')
+            title = tab.get("title", "")
+            site = tab.get("site", "")
             # ---
             if site not in sitelinks:
                 sitelinks[site] = []
@@ -63,9 +65,9 @@ def get_sitelinks(qs_list, lena=300):
 def save_sitelink_data(sitelink_data):
     for site, links in sitelink_data.items():
         # ---
-        with open(sites_path / f'{site}.json', "w", encoding="utf-8") as f:
+        with open(sites_path / f"{site}.json", "w", encoding="utf-8") as f:
             json.dump(links, f, sort_keys=True)
-            logger.info(f'dump <<green>> {site} of {len(links)}')
+            logger.info(f"dump <<green>> {site} of {len(links)}")
 
 
 def load_sitelink_data(qids_list) -> dict:
