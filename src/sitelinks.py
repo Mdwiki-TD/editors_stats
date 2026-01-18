@@ -36,7 +36,7 @@ def get_sitelinks(qs_list, lena=50):
         "utf8": 1,
     }
     # ---
-    all_entities = {}
+    all_entities = 0
     sitelinks = {}
     # ---
     groups = range(0, len(qs_list), lena)
@@ -47,7 +47,7 @@ def get_sitelinks(qs_list, lena=50):
         # ---
         params_wd["ids"] = "|".join(qids)
         # ---
-        logger.info(f"<<green>> done:{len(all_entities)} from {len(qs_list)}, get sitelinks for {len(qids)} qids.")
+        logger.info(f"<<green>> done:{all_entities:,} from {len(qs_list)}, get sitelinks for {len(qids)} qids.")
         # ---
         json1 = wikidataapi_post(params_wd)
         # ---
@@ -64,7 +64,7 @@ def get_sitelinks(qs_list, lena=50):
         # ---
         # { "entities": { "Q805": { "type": "item", "id": "Q805", "sitelinks": { "abwiki": { "site": "abwiki", "title": "Иемен", "badges": [] }, "acewiki": { "site": "acewiki", "title": "Yaman", "badges": [] },
         # ---
-        all_entities = {**all_entities, **entities}
+        all_entities += len(entities)
         # ---
         for qid, data in entities.items():
             # ---
