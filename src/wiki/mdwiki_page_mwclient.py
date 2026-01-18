@@ -2,6 +2,7 @@
 
 """
 # ---
+import functools
 import logging
 
 import mwclient
@@ -11,17 +12,24 @@ from ..config import mdwiki_pass, my_username
 logger = logging.getLogger(__name__)
 
 
+@functools.lru_cache(maxsize=1)
+def initialize_site_connection(username, password):
+    site_mw = mwclient.Site("www.mdwiki.org")
+    try:
+        site_mw.login(username, password)
+
+    except mwclient.errors.LoginError as e:
+        logger.error(f"Error logging in: {e}")
+    return site_mw
+
+
 class page_mwclient:
     def __init__(self, title: str):
-        self.site_mw = mwclient.Site("www.mdwiki.org")
         self.title = title
         self.username = my_username
         self.password = mdwiki_pass
 
-        try:
-            self.site_mw.login(self.username, self.password)
-        except mwclient.errors.LoginError as e:
-            logger.error(f"Error logging in: {e}")
+        self.site_mw = initialize_site_connection(self.username, self.password)
 
         self.page = self.site_mw.pages[title]
 
