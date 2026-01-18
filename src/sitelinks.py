@@ -161,7 +161,7 @@ def load_sitelink_data(qids_list) -> dict:
     # ---
     to_load = []
     # ---
-    for qid in qids_list:
+    for qid in tqdm(qids_list, desc="load sitelink data from files"):
         qid_sitelinks = load_qid_sitelinks(qid)
         if qid_sitelinks:
             sitelink_data[qid] = qid_sitelinks
