@@ -41,7 +41,7 @@ def save_one_qid_sitelinks(qid, sitelinks):
     with open(qids_sitelinks_path / f"{qid}.json", "w", encoding="utf-8") as f:
         json.dump(sitelinks, f, sort_keys=True)
 
-    logger.info(f"dumped sitelinks for {qid} to {qids_sitelinks_path / f'{qid}.json'}")
+    # logger.info(f"dumped sitelinks for {qid} to {qids_sitelinks_path / f'{qid}.json'}")
 
 
 def get_sitelinks(qs_list, lena=50):
