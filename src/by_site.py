@@ -143,7 +143,7 @@ def work_in_all_sites(p_site="") -> None:
     # ---
     for numb, (site_code, links) in enumerate(files.items(), start=1):
         # ---
-        logger.info(f"<<green>> n: {numb} site_code: {site_code}:")
+        logger.info(f"<<green>> n: {numb} site_code: {site_code}, links: {len(links)}:")
         # ---
         editors = extract_site_editors(site_code, links)
         # ---
