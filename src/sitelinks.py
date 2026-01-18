@@ -108,6 +108,25 @@ def get_sitelinks(qs_list, lena=50):
     return sitelinks
 
 
+def load_qid_sitelinks(qid) -> dict:
+    if not qid:
+        logger.info(f"<<red>> invalid qid: {qid}")
+        return {}
+
+    file_path = qids_sitelinks_path / f"{qid}.json"
+    if not file_path.exists():
+        logger.info(f"<<red>> sitelink file does not exist for {qid}")
+        return {}
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            qid_sitelinks = json.load(f)
+            return qid_sitelinks
+    except FileNotFoundError:
+        logger.info(f"<<red>> sitelink file not found for {qid}")
+        return {}
+
+
 def save_sitelink_data(sitelink_data):
     logger.info(f"save_sitelink_data to {sites_path}, len sites: {len(sitelink_data)}")
 
@@ -126,12 +145,34 @@ def save_sitelink_data(sitelink_data):
             logger.info(f"dump <<green>> {site} of {len(links)}")
 
 
-def load_sitelink_data(qids_list) -> dict:
+def load_sitelink_data_online(qids_list) -> dict:
     # ---
     sitelink_data = get_sitelinks(qids_list, lena=500)
     # ---
     # dump each site to file
     save_sitelink_data(sitelink_data)
+    # ---
+    return sitelink_data
+
+
+def load_sitelink_data(qids_list) -> dict:
+    # ---
+    sitelink_data = {}
+    # ---
+    to_load = []
+    # ---
+    for qid in qids_list:
+        qid_sitelinks = load_qid_sitelinks(qid)
+        if qid_sitelinks:
+            sitelink_data[qid] = qid_sitelinks
+        else:
+            to_load.append(qid)
+    # ---
+    if to_load:
+        logger.info(f"<<yellow>> need to load sitelinks online for {len(to_load)} qids")
+        sitelink_data_online = load_sitelink_data_online(to_load)
+        # ---
+        sitelink_data.update(sitelink_data_online)
     # ---
     return sitelink_data
 
