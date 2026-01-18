@@ -8,7 +8,7 @@ import logging
 
 from src.all2 import get_all_editors, work_all_editors
 from src.by_site import get_files_sorted_by_size, work_in_one_site, extract_site_editors
-from src.config import editors_dump_path, MAIN_PATH
+from src.config import editors_dump_path, main_dump_path
 from src.qids import get_qids_list
 from src.sitelinks import load_sitelink_data
 
@@ -17,7 +17,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(MAIN_PATH / 'remove_red_categories.log'),
+        logging.FileHandler(main_dump_path / 'remove_red_categories.log'),
         logging.StreamHandler(sys.stdout)
     ]
 )
