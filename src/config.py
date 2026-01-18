@@ -14,7 +14,9 @@ main_dump_path = Path(MAIN_PATH).expanduser() if MAIN_PATH else Path("/tmp") / "
 
 editors_dump_path = main_dump_path / "editors"
 sites_path = main_dump_path / "sites"
+qids_sitelinks_path = main_dump_path / "qids_sitelinks"
 
 main_dump_path.mkdir(exist_ok=True)
 editors_dump_path.mkdir(exist_ok=True)
 sites_path.mkdir(exist_ok=True)
+qids_sitelinks_path.mkdir(exist_ok=True)

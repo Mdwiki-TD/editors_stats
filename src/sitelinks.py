@@ -6,10 +6,21 @@ import logging
 
 from tqdm import tqdm
 from .wiki import wikidataapi_post
-from .config import sites_path
+from .config import sites_path, qids_sitelinks_path
 from .qids import load_qids_from_file
 
 logger = logging.getLogger(__name__)
+
+
+def save_one_qid_sitelinks(qid, sitelinks):
+    if not sitelinks:
+        logger.info(f"<<red>> no sitelinks for {qid} to save")
+        return
+
+    with open(qids_sitelinks_path / f"{qid}.json", "w", encoding="utf-8") as f:
+        json.dump(sitelinks, f, sort_keys=True)
+
+    logger.info(f"dumped sitelinks for {qid} to {qids_sitelinks_path / f'{qid}.json'}")
 
 
 def get_sitelinks(qs_list, lena=300):
@@ -46,13 +57,19 @@ def get_sitelinks(qs_list, lena=300):
         # ---
         entities = json1.get("entities", {})
         # ---
+        # { "entities": { "Q805": { "type": "item", "id": "Q805", "sitelinks": { "abwiki": { "site": "abwiki", "title": "Иемен", "badges": [] }, "acewiki": { "site": "acewiki", "title": "Yaman", "badges": [] },
+        # ---
         all_entities = {**all_entities, **entities}
         # ---
-        for _qid_1, kk in entities.items():
+        for qid, data in entities.items():
+            # ---
+            sitelinks = data.get("sitelinks", {})
+            # ---
+            save_one_qid_sitelinks(qid, sitelinks)
             # ---
             # "abwiki": {"site": "abwiki","title": "Обама, Барак","badges": []}
             # ---
-            for _, tab in kk.get("sitelinks", {}).items():
+            for _, tab in sitelinks.items():
                 # ---
                 title = tab.get("title", "")
                 site = tab.get("site", "")
