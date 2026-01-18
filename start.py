@@ -1,5 +1,5 @@
 """
-tfj run stats1 --image python3.10 --command "$HOME/local/bin/python3 ~/pybot/editor_stats/src/start.py"
+tfj run stats --image python3.9 --command "$HOME/local/bin/python3 ~/pybot/editor_stats/start.py"
 
 """
 import os
