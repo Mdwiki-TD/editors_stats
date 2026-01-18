@@ -88,7 +88,7 @@ def work_all_editors(editors):
     p_text = page_obj.get_text()
     # ---
     if p_text != text:
-        page_obj.save(newtext=text, summary="update", nocreate=0, minor="")
+        page_obj.save(newtext=text, summary="update")
     else:
         logger.info("<<green>> no changes")
     # ---

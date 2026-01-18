@@ -4,6 +4,7 @@
 import json
 import logging
 
+from tqdm import tqdm
 from .wiki import wikidataapi_post
 from .config import sites_path
 from .qids import load_qids_from_file
@@ -62,7 +63,7 @@ def get_sitelinks(qs_list, lena=300):
 
 
 def save_sitelink_data(sitelink_data):
-    for site, links in sitelink_data.items():
+    for site, links in tqdm(sitelink_data.items(), desc="dump sitelink data"):
         # ---
         with open(sites_path / f"{site}.json", "w", encoding="utf-8") as f:
             json.dump(links, f, sort_keys=True)
