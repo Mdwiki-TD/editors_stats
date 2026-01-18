@@ -43,30 +43,7 @@ def filter_editors(editors, site):
     return editors
 
 
-def work_in_one_site(site, links):
-    # ---
-    site = re.sub(r"wiki$", "", site)
-    # ---
-    logger.info(f"<<green>> site:{site} links: {len(links)}")
-    # ---
-    if len(links) < 100:
-        logger.info("<<red>> less than 100 articles")
-        # return
-    # ---
-    editors = get_editors(links, site)
-    # ---
-    editors = filter_editors(editors, site)
-    # ---
-    if not editors:
-        logger.info("<<red>> no editors")
-        return
-    # ---
-    if "dump" in sys.argv:
-        logger.debug("json.dumps(editors, indent=2)")
-        return
-    # ---
-    title = f"WikiProjectMed:WikiProject_Medicine/Stats/Top_medical_editors_{last_year}/{site}"
-    # ---
+def generate_editor_stats_text(site, links, editors):
     text = "{{:WPM:WikiProject Medicine/Total medical articles}}\n"
     text += f"{{{{Top medical editors by lang|{last_year}}}}}\n"
     # ---
@@ -83,28 +60,24 @@ def work_in_one_site(site, links):
         # ---
         if i == 100:
             break
-        # ---
     # ---
     text += "\n|}"
-    # ---
-    page_obj = page(title)
-    p_text = page_obj.get_text()
-    # ---
-    if p_text != text:
-        page_obj.save(newtext=text, summary="update")
-    else:
-        logger.info("<<green>> no changes")
-    # ---
+    return text
+
+
+def extract_site_editors(site, links) -> dict:
+    editors = get_editors(links, site)
+    editors = filter_editors(editors, site)
     return editors
 
 
-def work_in_all_sites(p_site="") -> None:
-    # ---
-    # read json files in sites_path
+def get_files_sorted_by_size(p_site="") -> dict:
     files = os.listdir(sites_path)
     # ---
     # sort files by biggest size
     files = sorted(files, key=lambda x: os.stat(sites_path / x).st_size, reverse=True)
+    # ---
+    files_new = {}
     # ---
     for numb, file in enumerate(files, start=1):
         # ---
@@ -121,10 +94,64 @@ def work_in_all_sites(p_site="") -> None:
         if p_site and f"{p_site}wiki" != site:
             continue
         # ---
+        site_code = re.sub(r"wiki$", "", site)
+        # ---
         with open(sites_path / file, "r", encoding="utf-8") as f:
             links = json.load(f)
         # ---
-        work_in_one_site(site, links)
+        files_new[site_code] = links
+    # ---
+    return files_new
+
+
+def work_in_one_site(site_code, links, editors):
+    # ---
+    logger.info(f"<<green>> site_code:{site_code} links: {len(links)}")
+    # ---
+    if len(links) < 100:
+        logger.info("<<red>> less than 100 articles")
+        # return
+    # ---
+    if "dump" in sys.argv:
+        logger.debug("json.dumps(editors, indent=2)")
+        return False
+    # ---
+    title = f"WikiProjectMed:WikiProject_Medicine/Stats/Top_medical_editors_{last_year}/{site_code}"
+    # ---
+    text = generate_editor_stats_text(site_code, links, editors)
+    # ---
+    if not text:
+        logger.info("<<red>> no text generated")
+        return False
+    # ---
+    page_obj = page(title)
+    p_text = page_obj.get_text()
+    # ---
+    if p_text == text:
+        logger.info("<<green>> no changes")
+        return False
+    # ---
+    page_obj.save(newtext=text, summary="update")
+    # ---
+    return True
+
+
+def work_in_all_sites(p_site="") -> None:
+    # ---
+    # read json files in sites_path
+    files = get_files_sorted_by_size(p_site)
+    # ---
+    for numb, (site_code, links) in enumerate(files.items(), start=1):
+        # ---
+        logger.info(f"<<green>> n: {numb} site_code: {site_code}:")
+        # ---
+        editors = extract_site_editors(site_code, links)
+        # ---
+        if not editors:
+            logger.info("<<red>> no editors")
+            continue
+        # ---
+        work_in_one_site(site_code, links, editors)
 
 
 def start():

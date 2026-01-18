@@ -31,7 +31,7 @@ class page_mwclient:
         return self.page.exists
 
     def save(self, newtext: str, summary: str):
-        self.page.save(newtext, summary=summary)
+        return self.page.save(newtext, summary=summary)
 
     def create(self, newtext: str, summary: str):
-        self.page.save(newtext, summary=summary)
+        return self.page.save(newtext, summary=summary)
