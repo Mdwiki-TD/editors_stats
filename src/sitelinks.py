@@ -16,8 +16,11 @@ def wikidata_mwclient_post(params):
     # ---
     site = log_in(site_url="www.wikidata.org", username=BOTUSERNAME, password=BOTPASSWORD)
     # ---
+    params.pop("action", None)  # remove action from params as mwclient api method uses action internally
+    # ---
     try:
-        response = site.api(params)
+        # response = site.api(params)
+        response = site.api('wbgetentities', **params)
         return response
     except Exception as e:
         logger.error(f"Error in wikidata_mwclient_post: {e}")
