@@ -53,6 +53,8 @@ def get_qids_list():
     if qids_list:
         with open(qids_file, "w", encoding="utf-8") as f:
             json.dump(qids_list, f, sort_keys=True)
+    else:
+        qids_list = load_qids_from_file()
 
     logger.debug(f"dumped {len(qids_list)} qids to {qids_file}")
 

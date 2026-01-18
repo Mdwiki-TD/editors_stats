@@ -11,7 +11,6 @@ from .qids import load_qids_from_file
 
 logger = logging.getLogger(__name__)
 
-
 def get_sitelinks(qs_list, lena=300):
     # ---
     qs_list = list(qs_list)
@@ -27,7 +26,9 @@ def get_sitelinks(qs_list, lena=300):
     # ---
     all_entities = {}
     # ---
-    for i in range(0, len(qs_list), lena):
+    groups = range(0, len(qs_list), lena)
+    # ---
+    for i in tqdm(groups, desc="get sitelinks from wikidata"):
         # ---
         qids = qs_list[i : i + lena]
         # ---
@@ -63,6 +64,12 @@ def get_sitelinks(qs_list, lena=300):
 
 
 def save_sitelink_data(sitelink_data):
+    logger.info(f"save_sitelink_data to {sites_path}, len sites: {len(sitelink_data)}")
+
+    if not sitelink_data:
+        logger.info("<<red>> no sitelink data to save_sitelink_data")
+        return
+    # ---
     for site, links in tqdm(sitelink_data.items(), desc="dump sitelink data"):
         # ---
         if not links:

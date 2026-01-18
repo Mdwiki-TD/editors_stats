@@ -12,7 +12,8 @@ from src.qids import get_qids_list
 from src.sitelinks import load_sitelink_data
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logging.basicConfig(level=logging.INFO)
+# logger.setLevel(logging.INFO)
 
 
 def start():
