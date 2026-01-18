@@ -127,6 +127,14 @@ def load_qid_sitelinks(qid) -> dict:
         return {}
 
 
+def check_qid_sitelinks(qid) -> bool:
+    file_path = qids_sitelinks_path / f"{qid}.json"
+    if not file_path.exists():
+        logger.info(f"<<red>> sitelink file does not exist for {qid}")
+        return False
+    return True
+
+
 def save_sitelink_data(sitelink_data):
     logger.info(f"save_sitelink_data to {sites_path}, len sites: {len(sitelink_data)}")
 
@@ -155,26 +163,17 @@ def load_sitelink_data_online(qids_list) -> dict:
     return sitelink_data
 
 
-def load_sitelink_data(qids_list) -> dict:
-    # ---
-    sitelink_data = {}
-    # ---
+def load_sitelink_data(qids_list) -> None:
     to_load = []
     # ---
     for qid in tqdm(qids_list, desc="load sitelink data from files"):
-        qid_sitelinks = load_qid_sitelinks(qid)
-        if qid_sitelinks:
-            sitelink_data[qid] = qid_sitelinks
-        else:
+        if not check_qid_sitelinks(qid):
             to_load.append(qid)
     # ---
     if to_load:
         logger.info(f"<<yellow>> need to load sitelinks online for {len(to_load)} qids")
         sitelink_data_online = load_sitelink_data_online(to_load)
-        # ---
-        sitelink_data.update(sitelink_data_online)
-    # ---
-    return sitelink_data
+        logger.info(f"<<green>> loaded sitelink data online, sitelink_data_online len: {len(sitelink_data_online)}")
 
 
 def start():

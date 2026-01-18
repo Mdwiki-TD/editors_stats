@@ -30,8 +30,8 @@ def start():
     qids_list = get_qids_list()
     logger.info(f"len qids_list: {len(qids_list)}")
 
-    sitelinks = load_sitelink_data(qids_list)
-    logger.info(f"len sitelinks: {len(sitelinks)}")
+    load_sitelink_data(qids_list)
+    logger.info("load_sitelink_data done")
 
     # read json files in sites_path
     files = get_files_sorted_by_size()
