@@ -26,13 +26,15 @@ logger = logging.getLogger(__name__)
 # logger.setLevel(logging.INFO)
 
 
-def start():
+def start_qids():
     qids_list = get_qids_list()
     logger.info(f"len qids_list: {len(qids_list)}")
 
     load_sitelink_data(qids_list)
     logger.info("load_sitelink_data done")
 
+
+def start():
     # read json files in sites_path
     files = get_files_sorted_by_size()
     # ---
@@ -59,4 +61,7 @@ def start():
 
 
 if __name__ == "__main__":
-    start()
+    if "start_qids" in sys.argv:
+        start_qids()
+    else:
+        start()
