@@ -23,7 +23,7 @@ def save_one_qid_sitelinks(qid, sitelinks):
     logger.info(f"dumped sitelinks for {qid} to {qids_sitelinks_path / f'{qid}.json'}")
 
 
-def get_sitelinks(qs_list, lena=300):
+def get_sitelinks(qs_list, lena=50):
     # ---
     qs_list = list(qs_list)
     # ---
@@ -57,19 +57,24 @@ def get_sitelinks(qs_list, lena=300):
         # ---
         entities = json1.get("entities", {})
         # ---
+        if not entities:
+            logger.info("<<red>> no entities in json1")
+            logger.error(json1)
+            continue
+        # ---
         # { "entities": { "Q805": { "type": "item", "id": "Q805", "sitelinks": { "abwiki": { "site": "abwiki", "title": "Иемен", "badges": [] }, "acewiki": { "site": "acewiki", "title": "Yaman", "badges": [] },
         # ---
         all_entities = {**all_entities, **entities}
         # ---
         for qid, data in entities.items():
             # ---
-            sitelinks = data.get("sitelinks", {})
+            qid_sitelinks = data.get("sitelinks", {})
             # ---
-            save_one_qid_sitelinks(qid, sitelinks)
+            save_one_qid_sitelinks(qid, qid_sitelinks)
             # ---
             # "abwiki": {"site": "abwiki","title": "Обама, Барак","badges": []}
             # ---
-            for _, tab in sitelinks.items():
+            for _, tab in qid_sitelinks.items():
                 # ---
                 title = tab.get("title", "")
                 site = tab.get("site", "")
@@ -102,7 +107,7 @@ def save_sitelink_data(sitelink_data):
 
 def load_sitelink_data(qids_list) -> dict:
     # ---
-    sitelink_data = get_sitelinks(qids_list, lena=500)
+    sitelink_data = get_sitelinks(qids_list, lena=50)
     # ---
     # dump each site to file
     save_sitelink_data(sitelink_data)
