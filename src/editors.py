@@ -4,6 +4,7 @@
 import json
 import os
 import sys
+import logging
 import ipaddress
 from datetime import datetime
 
@@ -13,7 +14,7 @@ from pymysql.converters import escape_string
 from .api_sql import retrieve_sql_results
 from .config import editors_dump_path
 from .utils.ar import get_ar_results
-
+logger = logging.getLogger(__name__)
 last_year = datetime.now().year - 1
 
 
@@ -80,6 +81,11 @@ def get_editors_sql(links, site, split_by=100):
 
 
 def dumpit(editors, site):
+    # ---
+    if not editors:
+        logger.info(f"<<red>> no editors for {site} to dump")
+        return
+    # ---
     with open(editors_dump_path / f"{site}.json", "w", encoding="utf-8") as f:
         json.dump(editors, f, sort_keys=True)
 
@@ -87,10 +93,11 @@ def dumpit(editors, site):
 def get_editors(links, site, do_dump=True):
     editors = {}
     # ---
-    if os.path.exists(editors_dump_path / f"{site}.json"):
+    if os.path.exists(editors_dump_path / f"{site}.json") and "nolocal" not in sys.argv:
         with open(editors_dump_path / f"{site}.json", "r", encoding="utf-8") as f:
             editors = json.load(f)
-            return editors
+            if editors:
+                return editors
     # ---
     if site == "ar":
         editors = get_ar_results()

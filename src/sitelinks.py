@@ -65,6 +65,10 @@ def get_sitelinks(qs_list, lena=300):
 def save_sitelink_data(sitelink_data):
     for site, links in tqdm(sitelink_data.items(), desc="dump sitelink data"):
         # ---
+        if not links:
+            logger.info(f"<<red>> no links for {site}")
+            continue
+        # ---
         with open(sites_path / f"{site}.json", "w", encoding="utf-8") as f:
             json.dump(links, f, sort_keys=True)
             logger.info(f"dump <<green>> {site} of {len(links)}")

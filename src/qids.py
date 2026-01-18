@@ -50,8 +50,9 @@ def get_qids_list():
     # ---
     qids_list = list(articles.values())
     # ---
-    with open(qids_file, "w", encoding="utf-8") as f:
-        json.dump(qids_list, f, sort_keys=True)
+    if qids_list:
+        with open(qids_file, "w", encoding="utf-8") as f:
+            json.dump(qids_list, f, sort_keys=True)
 
     logger.debug(f"dumped {len(qids_list)} qids to {qids_file}")
 
