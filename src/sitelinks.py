@@ -26,6 +26,7 @@ def get_sitelinks(qs_list, lena=300):
     }
     # ---
     all_entities = {}
+    sitelinks = {}
     # ---
     groups = range(0, len(qs_list), lena)
     # ---
@@ -39,27 +40,27 @@ def get_sitelinks(qs_list, lena=300):
         # ---
         json1 = wikidataapi_post(params_wd)
         # ---
-        if json1:
-            # ---
-            entities = json1.get("entities", {})
-            # ---
-            all_entities = {**all_entities, **entities}
-    # ---
-    sitelinks = {}
-    # ---
-    for _qid_1, kk in all_entities.items():
+        if not json1:
+            logger.info("<<red>> no json1 from wikidataapi_post")
+            continue
         # ---
-        # "abwiki": {"site": "abwiki","title": "Обама, Барак","badges": []}
+        entities = json1.get("entities", {})
         # ---
-        for _, tab in kk.get("sitelinks", {}).items():
+        all_entities = {**all_entities, **entities}
+        # ---
+        for _qid_1, kk in entities.items():
             # ---
-            title = tab.get("title", "")
-            site = tab.get("site", "")
+            # "abwiki": {"site": "abwiki","title": "Обама, Барак","badges": []}
             # ---
-            if site not in sitelinks:
-                sitelinks[site] = []
-            # ---
-            sitelinks[site].append(title)
+            for _, tab in kk.get("sitelinks", {}).items():
+                # ---
+                title = tab.get("title", "")
+                site = tab.get("site", "")
+                # ---
+                if site not in sitelinks:
+                    sitelinks[site] = []
+                # ---
+                sitelinks[site].append(title)
     # ---
     return sitelinks
 
