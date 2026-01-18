@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 # load environment variables from a .env file if it exists
 load_dotenv()
 
+BOTUSERNAME = os.getenv("botusername", "")
+BOTPASSWORD = os.getenv("botpassword", "")
+
 my_username = os.getenv("MDWIKI_USERNAME", "")
 mdwiki_pass = os.getenv("MDWIKI_PASSWORD", "")
 MAIN_PATH = os.getenv("EDITORS_STATS_PATH", "")

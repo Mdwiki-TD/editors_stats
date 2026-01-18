@@ -3,6 +3,7 @@ tfj run stats --image python3.9 --command "$HOME/local/bin/python3 ~/pybot/edito
 
 """
 import os
+import sys
 import logging
 
 from src.all2 import get_all_editors, work_all_editors
@@ -11,8 +12,17 @@ from src.config import editors_dump_path
 from src.qids import get_qids_list
 from src.sitelinks import load_sitelink_data
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('remove_red_categories.log'),
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
+
 # logger.setLevel(logging.INFO)
 
 

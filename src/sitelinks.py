@@ -5,11 +5,29 @@ import json
 import logging
 
 from tqdm import tqdm
-from .wiki import wikidataapi_post
-from .config import sites_path, qids_sitelinks_path
+from .wiki import wikidataapi_post, log_in
+from .config import BOTUSERNAME, BOTPASSWORD, sites_path, qids_sitelinks_path
 from .qids import load_qids_from_file
 
 logger = logging.getLogger(__name__)
+
+
+def wikidata_mwclient_post(params):
+    # ---
+    site = log_in(site_url="www.wikidata.org", username=BOTUSERNAME, password=BOTPASSWORD)
+    # ---
+    try:
+        response = site.api(params)
+        return response
+    except Exception as e:
+        logger.error(f"Error in wikidata_mwclient_post: {e}")
+        return None
+
+
+def wrap_post(params):
+    if BOTUSERNAME and BOTPASSWORD:
+        return wikidata_mwclient_post(params)
+    return wikidataapi_post(params)
 
 
 def save_one_qid_sitelinks(qid, sitelinks):
@@ -49,10 +67,10 @@ def get_sitelinks(qs_list, lena=50):
         # ---
         logger.info(f"<<green>> done:{all_entities:,} from {len(qs_list)}, get sitelinks for {len(qids)} qids.")
         # ---
-        json1 = wikidataapi_post(params_wd)
+        json1 = wrap_post(params_wd)
         # ---
         if not json1:
-            logger.info("<<red>> no json1 from wikidataapi_post")
+            logger.info("<<red>> no json1 from wrap_post")
             continue
         # ---
         entities = json1.get("entities", {})
@@ -107,7 +125,7 @@ def save_sitelink_data(sitelink_data):
 
 def load_sitelink_data(qids_list) -> dict:
     # ---
-    sitelink_data = get_sitelinks(qids_list, lena=50)
+    sitelink_data = get_sitelinks(qids_list, lena=500)
     # ---
     # dump each site to file
     save_sitelink_data(sitelink_data)
