@@ -11,6 +11,7 @@ from .qids import load_qids_from_file
 
 logger = logging.getLogger(__name__)
 
+
 def get_sitelinks(qs_list, lena=300):
     # ---
     qs_list = list(qs_list)
