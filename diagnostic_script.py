@@ -33,7 +33,15 @@ def check_site_files(sites_path):
         return {}
     
     site_data = {}
-    print(f"\nFound {len(files)} site files:\n")
+    
+    # Process ALL files into site_data for accurate major language checking
+    for file in files:
+        with open(file, 'r', encoding='utf-8') as f:
+            links = json.load(f)
+        site_data[file.stem] = len(links)
+    
+    # Display only top 30 by size
+    print(f"\nFound {len(files)} site files. Showing top 30 by article count:\n")
     
     # Common major language wikis to check
     major_wikis = {
@@ -49,22 +57,16 @@ def check_site_files(sites_path):
         "nlwiki": "Dutch",
     }
     
-    for file in sorted(files, key=lambda x: os.path.getsize(x), reverse=True)[:30]:
-        with open(file, 'r', encoding='utf-8') as f:
-            links = json.load(f)
-        
-        site_name = file.stem
-        article_count = len(links)
-        site_data[site_name] = article_count
-        
+    # Sort by article count and display top 30
+    sorted_sites = sorted(site_data.items(), key=lambda x: x[1], reverse=True)[:30]
+    for site_name, article_count in sorted_sites:
         lang_name = major_wikis.get(site_name, "")
         marker = "✓" if article_count >= 100 else "⚠️" if article_count > 0 else "❌"
-        
         print(f"  {marker} {site_name:20} {article_count:6,} articles  {lang_name}")
     
     print(f"\n📊 Total sites with data: {len(files)}")
     
-    # Check for missing major languages
+    # Check for missing major languages (uses complete site_data)
     print(f"\n🔍 Checking major languages:")
     for wiki, lang_name in major_wikis.items():
         if wiki not in site_data:
@@ -94,7 +96,15 @@ def check_editor_files(editors_path):
         return {}
     
     editor_data = {}
-    print(f"\nFound {len(files)} editor files:\n")
+    
+    # Process ALL files into editor_data for accurate major language checking
+    for file in files:
+        with open(file, 'r', encoding='utf-8') as f:
+            editors = json.load(f)
+        editor_data[file.stem] = len(editors)
+    
+    # Display only top 30 by size
+    print(f"\nFound {len(files)} editor files. Showing top 30 by editor count:\n")
     
     # Major languages to check (without "wiki" suffix as stored in editors/)
     major_langs = {
@@ -110,22 +120,16 @@ def check_editor_files(editors_path):
         "nl": "Dutch",
     }
     
-    for file in sorted(files, key=lambda x: os.path.getsize(x), reverse=True)[:30]:
-        with open(file, 'r', encoding='utf-8') as f:
-            editors = json.load(f)
-        
-        lang_code = file.stem
-        editor_count = len(editors)
-        editor_data[lang_code] = editor_count
-        
+    # Sort by editor count and display top 30
+    sorted_editors = sorted(editor_data.items(), key=lambda x: x[1], reverse=True)[:30]
+    for lang_code, editor_count in sorted_editors:
         lang_name = major_langs.get(lang_code, "")
         marker = "✓" if editor_count > 0 else "❌"
-        
         print(f"  {marker} {lang_code:15} {editor_count:6,} editors  {lang_name}")
     
     print(f"\n📊 Total wikis with editor data: {len(files)}")
     
-    # Check for missing major languages
+    # Check for missing major languages (uses complete editor_data)
     print(f"\n🔍 Checking major languages:")
     for lang, lang_name in major_langs.items():
         if lang not in editor_data:
@@ -178,8 +182,12 @@ def main():
     print("=" * 70)
     
     # Determine paths from environment or use defaults
-    from dotenv import load_dotenv
-    load_dotenv()
+    try:
+        from dotenv import load_dotenv
+        load_dotenv()
+    except ImportError:
+        # python-dotenv not installed, continue without it
+        pass
     
     MAIN_PATH = os.getenv("EDITORS_STATS_PATH", "")
     main_dump_path = Path(MAIN_PATH).expanduser() if MAIN_PATH else Path("/tmp") / "editors_stats_dump"

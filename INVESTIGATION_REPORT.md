@@ -48,7 +48,7 @@ The only substantial differences between old and new code are:
    - For each wiki (e.g., "dewiki")
    - Strips "wiki" suffix → "de"
    - Converts back to proper database name → "dewiki"
-   - Queries WikiMedia analytics database at `dewiki.analytics.db.svc.wikimedia.cloud`
+   - Queries Wikimedia analytics database at `dewiki.analytics.db.svc.wikimedia.cloud`
 
 ### Test Results
 ```
