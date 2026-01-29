@@ -38,6 +38,39 @@ def make_labsdb_dbs_p(wiki):
     Returns:
         tuple: A tuple containing the host string and the database name string.
     """
+    
+    # ---
+    pre_defined_db_mapping = {
+        "gsw": "alswiki_p",
+        "sgs": "bat_smgwiki_p",
+        "bat-smg": "bat_smgwiki_p",
+        "be-tarask": "be_x_oldwiki_p",
+        "bho": "bhwiki_p",
+        "cbk": "cbk_zamwiki_p",
+        "cbk-zam": "cbk_zamwiki_p",
+        "vro": "fiu_vrowiki_p",
+        "fiu-vro": "fiu_vrowiki_p",
+        "map-bms": "map_bmswiki_p",
+        "nds-nl": "nds_nlwiki_p",
+        "nb": "nowiki_p",
+        "rup": "roa_rupwiki_p",
+        "roa-rup": "roa_rupwiki_p",
+        "roa-tara": "roa_tarawiki_p",
+        "lzh": "zh_classicalwiki_p",
+        "zh-classical": "zh_classicalwiki_p",
+        "nan": "zh_min_nanwiki_p",
+        "zh-min-nan": "zh_min_nanwiki_p",
+        "yue": "zh_yuewiki_p",
+        "zh-yue": "zh_yuewiki_p",
+    }
+    # ---
+    wiki_normalized = wiki.strip().lower().removesuffix("_p").removesuffix("wiki")
+    if wiki_normalized in pre_defined_db_mapping:
+        dbs_p = f"{pre_defined_db_mapping[wiki_normalized]}"
+        sub_host = dbs_p.removesuffix("_p")
+        host = f"{sub_host}.analytics.db.svc.wikimedia.cloud"
+        return host, dbs_p
+    # ---
     if wiki.endswith("wiki"):
         wiki = wiki[:-4]
     # ---
