@@ -75,7 +75,6 @@ def work_all_editors(editors):
         # ---
         if count < 10:
             break
-        # ---
     # ---
     txt_table += "\n|}"
     # ---
