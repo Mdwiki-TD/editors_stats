@@ -83,7 +83,7 @@ def get_editors_sql(links, site, split_by=100):
 def dumpit(editors, site):
     # ---
     if not editors:
-        logger.info(f"<<red>> no editors for {site} to dump")
+        logger.error(f"<<red>> no editors for {site} to dump")
         return
     # ---
     with open(editors_dump_path / f"{site}.json", "w", encoding="utf-8") as f:

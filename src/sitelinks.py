@@ -35,7 +35,7 @@ def wrap_post(params):
 
 def save_one_qid_sitelinks(qid, sitelinks):
     if not sitelinks:
-        logger.info(f"<<red>> no sitelinks for {qid} to save")
+        logger.error(f"<<red>> no sitelinks for {qid} to save")
         return
 
     with open(qids_sitelinks_path / f"{qid}.json", "w", encoding="utf-8") as f:
@@ -110,12 +110,12 @@ def get_sitelinks(qs_list, lena=50):
 
 def load_qid_sitelinks(qid) -> dict:
     if not qid:
-        logger.info(f"<<red>> invalid qid: {qid}")
+        logger.error(f"<<red>> invalid qid: {qid}")
         return {}
 
     file_path = qids_sitelinks_path / f"{qid}.json"
     if not file_path.exists():
-        logger.info(f"<<red>> sitelink file does not exist for {qid}")
+        logger.error(f"<<red>> sitelink file does not exist for {qid}")
         return {}
 
     try:
@@ -123,14 +123,14 @@ def load_qid_sitelinks(qid) -> dict:
             qid_sitelinks = json.load(f)
             return qid_sitelinks
     except FileNotFoundError:
-        logger.info(f"<<red>> sitelink file not found for {qid}")
+        logger.error(f"<<red>> sitelink file not found for {qid}")
         return {}
 
 
 def check_qid_sitelinks(qid) -> bool:
     file_path = qids_sitelinks_path / f"{qid}.json"
     if not file_path.exists():
-        logger.info(f"<<red>> sitelink file does not exist for {qid}")
+        logger.error(f"<<red>> sitelink file does not exist for {qid}")
         return False
     return True
 
@@ -145,7 +145,7 @@ def save_sitelink_data(sitelink_data):
     for site, links in tqdm(sitelink_data.items(), desc="dump sitelink data"):
         # ---
         if not links:
-            logger.info(f"<<red>> no links for {site}")
+            logger.error(f"<<red>> no links for {site}")
             continue
         # ---
         with open(sites_path / f"{site}.json", "w", encoding="utf-8") as f:
